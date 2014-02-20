@@ -36,8 +36,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Directory.cs" />
+    <Compile Include="DirectoryEntryConfigurationWrapper.cs" />
     <Compile Include="DirectoryEntryWrapper.cs" />
+    <Compile Include="IDirectory.cs" />
     <Compile Include="IDirectoryEntry.cs" />
+    <Compile Include="IDirectoryEntryConfiguration.cs" />
+    <Compile Include="IDirectoryEntryInternal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,7 +2,7 @@
 
 namespace HansKindberg.DirectoryServices
 {
-	public class Directory
+	public class Directory : IDirectory
 	{
 		#region Fields
 
@@ -55,19 +55,9 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
-		public virtual bool Delete(string path)
+		public virtual bool Exists(string path)
 		{
-			if(!DirectoryEntry.Exists(path))
-				return false;
-
-			DirectoryEntry directoryEntry = new DirectoryEntry(path, this.UserName, this.Password);
-
-			if(this.AuthenticationTypes.HasValue)
-				directoryEntry.AuthenticationType = this.AuthenticationTypes.Value;
-
-			directoryEntry.DeleteTree();
-
-			return true;
+			return DirectoryEntry.Exists(path);
 		}
 
 		public virtual IDirectoryEntry Get(string path)
@@ -84,13 +74,6 @@ namespace HansKindberg.DirectoryServices
 
 			return directoryEntry;
 		}
-
-		public virtual object Invoke(string path, string methodName, params object[] arguments)
-		{
-			return this.GetDirectoryEntry(path).Invoke(methodName, arguments);
-		}
-
-		public virtual void Save(IDirectoryEntry directoryEntry) {}
 
 		#endregion
 	}

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.DirectoryServices;
+using System.Globalization;
 using System.Linq;
 
 namespace HansKindberg.DirectoryServices
 {
-	public class DirectoryEntryWrapper : IDirectoryEntry
+	public class DirectoryEntryWrapper : IDirectoryEntry, IDirectoryEntryInternal
 	{
 		#region Fields
 
@@ -26,6 +28,16 @@ namespace HansKindberg.DirectoryServices
 
 		#endregion
 
+		#region Events
+
+		public virtual event EventHandler Disposed
+		{
+			add { this.DirectoryEntry.Disposed += value; }
+			remove { this.DirectoryEntry.Disposed -= value; }
+		}
+
+		#endregion
+
 		#region Properties
 
 		public virtual IEnumerable<IDirectoryEntry> Children
@@ -33,9 +45,34 @@ namespace HansKindberg.DirectoryServices
 			get { return this.DirectoryEntry.Children.Cast<DirectoryEntry>().Select(directoryEntry => (DirectoryEntryWrapper) directoryEntry); }
 		}
 
-		protected internal virtual DirectoryEntry DirectoryEntry
+		public virtual DirectoryEntry DirectoryEntry
 		{
 			get { return this._directoryEntry; }
+		}
+
+		public virtual Guid Guid
+		{
+			get { return this.DirectoryEntry.Guid; }
+		}
+
+		public virtual string Name
+		{
+			get { return this.DirectoryEntry.Name; }
+		}
+
+		public virtual string NativeGuid
+		{
+			get { return this.DirectoryEntry.NativeGuid; }
+		}
+
+		public virtual object NativeObject
+		{
+			get { return this.DirectoryEntry.NativeObject; }
+		}
+
+		public virtual IDirectoryEntryConfiguration Options
+		{
+			get { return (DirectoryEntryConfigurationWrapper) this.DirectoryEntry.Options; }
 		}
 
 		public virtual IDirectoryEntry Parent
@@ -52,6 +89,115 @@ namespace HansKindberg.DirectoryServices
 		public virtual IDictionary Properties
 		{
 			get { return this.DirectoryEntry.Properties; }
+		}
+
+		public virtual string SchemaClassName
+		{
+			get { return this.DirectoryEntry.SchemaClassName; }
+		}
+
+		public virtual IDirectoryEntry SchemaEntry
+		{
+			get { return (DirectoryEntryWrapper) this.DirectoryEntry.SchemaEntry; }
+		}
+
+		public virtual ISite Site
+		{
+			get { return this.DirectoryEntry.Site; }
+			set { this.DirectoryEntry.Site = value; }
+		}
+
+		public virtual bool UsePropertyCache
+		{
+			get { return this.DirectoryEntry.UsePropertyCache; }
+			set { this.DirectoryEntry.UsePropertyCache = value; }
+		}
+
+		#endregion
+
+		#region Methods
+
+		public virtual void Close()
+		{
+			this.DirectoryEntry.Close();
+		}
+
+		public virtual void CommitChanges()
+		{
+			this.DirectoryEntry.CommitChanges();
+		}
+
+		public virtual IDirectoryEntry CopyTo(IDirectoryEntry newParent)
+		{
+			return (DirectoryEntryWrapper) this.DirectoryEntry.CopyTo(this.GetDirectoryEntry(newParent));
+		}
+
+		public virtual IDirectoryEntry CopyTo(IDirectoryEntry newParent, string newName)
+		{
+			return (DirectoryEntryWrapper) this.DirectoryEntry.CopyTo(this.GetDirectoryEntry(newParent), newName);
+		}
+
+		public virtual void DeleteTree()
+		{
+			this.DirectoryEntry.DeleteTree();
+		}
+
+		public virtual void Dispose()
+		{
+			this.DirectoryEntry.Dispose();
+		}
+
+		protected internal virtual DirectoryEntry GetDirectoryEntry(IDirectoryEntry directoryEntry)
+		{
+			if(directoryEntry == null)
+				return null;
+
+			IDirectoryEntryInternal directoryEntryInternal = directoryEntry as IDirectoryEntryInternal;
+
+			if(directoryEntryInternal != null)
+				return directoryEntryInternal.DirectoryEntry;
+
+			throw new NotImplementedException(string.Format(CultureInfo.InvariantCulture, "The object of type \"{0}\" does not implement \"{1}\".", directoryEntry.GetType(), typeof(IDirectoryEntryInternal)));
+		}
+
+		public virtual object Invoke(string methodName, params object[] args)
+		{
+			return this.DirectoryEntry.Invoke(methodName, args);
+		}
+
+		public virtual object InvokeGet(string propertyName)
+		{
+			return this.DirectoryEntry.InvokeGet(propertyName);
+		}
+
+		public virtual void InvokeSet(string propertyName, params object[] args)
+		{
+			this.DirectoryEntry.InvokeSet(propertyName, args);
+		}
+
+		public virtual void MoveTo(IDirectoryEntry newParent)
+		{
+			this.DirectoryEntry.MoveTo(this.GetDirectoryEntry(newParent));
+		}
+
+		public virtual void MoveTo(IDirectoryEntry newParent, string newName)
+		{
+			this.DirectoryEntry.MoveTo(this.GetDirectoryEntry(newParent), newName);
+		}
+
+		public virtual void RefreshCache()
+		{
+			this.DirectoryEntry.RefreshCache();
+		}
+
+		public virtual void RefreshCache(string[] propertyNames)
+		{
+			this.DirectoryEntry.RefreshCache(propertyNames);
+		}
+
+		public virtual void Rename(string newName)
+		{
+			this.DirectoryEntry.Rename(newName);
 		}
 
 		#endregion

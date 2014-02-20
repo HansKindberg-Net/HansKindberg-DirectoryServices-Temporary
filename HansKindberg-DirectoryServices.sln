@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HansKindberg.DirectoryServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HansKindberg.DirectoryServices.UnitTests", "HansKindberg.DirectoryServices.UnitTests\HansKindberg.DirectoryServices.UnitTests.csproj", "{BD999450-0D5B-4CD9-BF39-E416555D4DBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HansKindberg.DirectoryServices.IntegrationTests", "HansKindberg.DirectoryServices.IntegrationTests\HansKindberg.DirectoryServices.IntegrationTests.csproj", "{1018E9DD-D0A3-4D5A-8266-B3C459A02A49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{BD999450-0D5B-4CD9-BF39-E416555D4DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD999450-0D5B-4CD9-BF39-E416555D4DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD999450-0D5B-4CD9-BF39-E416555D4DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1018E9DD-D0A3-4D5A-8266-B3C459A02A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1018E9DD-D0A3-4D5A-8266-B3C459A02A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1018E9DD-D0A3-4D5A-8266-B3C459A02A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1018E9DD-D0A3-4D5A-8266-B3C459A02A49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
