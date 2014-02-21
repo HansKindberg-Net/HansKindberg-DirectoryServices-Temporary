@@ -9,7 +9,7 @@ namespace HansKindberg.DirectoryServices
 	{
 		#region Properties
 
-		IEnumerable<IDirectoryEntry> Children { get; }
+		IDirectoryEntryCollection Children { get; }
 		Guid Guid { get; }
 		string Name { get; }
 		string NativeGuid { get; }
@@ -18,7 +18,7 @@ namespace HansKindberg.DirectoryServices
 		IDirectoryEntryConfiguration Options { get; }
 		IDirectoryEntry Parent { get; }
 		string Path { get; set; }
-		IDictionary Properties { get; }
+		IPropertyCollection Properties { get; }
 		string SchemaClassName { get; }
 		IDirectoryEntry SchemaEntry { get; }
 		bool UsePropertyCache { get; set; }

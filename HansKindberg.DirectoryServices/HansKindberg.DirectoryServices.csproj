@@ -36,13 +36,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Directory.cs" />
+    <Compile Include="DirectoryEntriesWrapper.cs" />
     <Compile Include="DirectoryEntryConfigurationWrapper.cs" />
     <Compile Include="DirectoryEntryWrapper.cs" />
+    <Compile Include="Extensions\DefaultDirectoryEntryExtension.cs" />
+    <Compile Include="Extensions\DefaultPropertyValueCollectionExtension.cs" />
+    <Compile Include="Extensions\DirectoryEntryExtension.cs" />
+    <Compile Include="Extensions\IDirectoryEntryExtension.cs" />
+    <Compile Include="Extensions\IPropertyValueCollectionExtension.cs" />
+    <Compile Include="Extensions\PropertyValueCollectionExtension.cs" />
     <Compile Include="IDirectory.cs" />
     <Compile Include="IDirectoryEntry.cs" />
+    <Compile Include="IDirectoryEntryCollection.cs" />
     <Compile Include="IDirectoryEntryConfiguration.cs" />
     <Compile Include="IDirectoryEntryInternal.cs" />
+    <Compile Include="IPropertyCollection.cs" />
+    <Compile Include="IPropertyValueCollection.cs" />
+    <Compile Include="IPropertyValueCollectionInternal.cs" />
+    <Compile Include="ISchemaNameCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyCollectionWrapper.cs" />
+    <Compile Include="PropertyEnumeratorWrapper.cs" />
+    <Compile Include="PropertyValueCollectionWrapper.cs" />
+    <Compile Include="SchemaNameCollectionWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

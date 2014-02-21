@@ -6,50 +6,32 @@ namespace HansKindberg.DirectoryServices
 	{
 		#region Fields
 
-		private readonly AuthenticationTypes? _authenticationTypes;
-		private readonly string _password;
-		private readonly string _userName;
+		private AuthenticationTypes _authenticationTypes;
 
 		#endregion
 
 		#region Constructors
 
-		public Directory() {}
-
-		public Directory(AuthenticationTypes authenticationTypes)
+		public Directory()
 		{
-			this._authenticationTypes = authenticationTypes;
-		}
-
-		public Directory(string userName, string password)
-		{
-			this._password = password;
-			this._userName = userName;
-		}
-
-		public Directory(string userName, string password, AuthenticationTypes authenticationTypes) : this(userName, password)
-		{
-			this._authenticationTypes = authenticationTypes;
+			using(DirectoryEntry directoryEntry = new DirectoryEntry())
+			{
+				this._authenticationTypes = directoryEntry.AuthenticationType;
+			}
 		}
 
 		#endregion
 
 		#region Properties
 
-		protected internal virtual AuthenticationTypes? AuthenticationTypes
+		public virtual AuthenticationTypes AuthenticationTypes
 		{
 			get { return this._authenticationTypes; }
+			set { this._authenticationTypes = value; }
 		}
 
-		protected internal virtual string Password
-		{
-			get { return this._password; }
-		}
-
-		protected internal virtual string UserName
-		{
-			get { return this._userName; }
-		}
+		public virtual string Password { get; set; }
+		public virtual string UserName { get; set; }
 
 		#endregion
 
@@ -67,12 +49,7 @@ namespace HansKindberg.DirectoryServices
 
 		protected internal virtual DirectoryEntry GetDirectoryEntry(string path)
 		{
-			DirectoryEntry directoryEntry = new DirectoryEntry(path, this.UserName, this.Password);
-
-			if(this.AuthenticationTypes.HasValue)
-				directoryEntry.AuthenticationType = this.AuthenticationTypes.Value;
-
-			return directoryEntry;
+			return new DirectoryEntry(path, this.UserName, this.Password, this.AuthenticationTypes);
 		}
 
 		#endregion

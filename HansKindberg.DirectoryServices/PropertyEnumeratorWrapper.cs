@@ -1,0 +1,78 @@
+﻿using System;
+using System.Collections;
+using System.DirectoryServices;
+
+namespace HansKindberg.DirectoryServices
+{
+	public class PropertyEnumeratorWrapper : IDictionaryEnumerator, IDisposable
+	{
+		#region Fields
+
+		private readonly IDictionaryEnumerator _propertyEnumerator;
+
+		#endregion
+
+		#region Constructors
+
+		public PropertyEnumeratorWrapper(IDictionaryEnumerator propertyEnumerator)
+		{
+			if(propertyEnumerator == null)
+				throw new ArgumentNullException("propertyEnumerator");
+
+			this._propertyEnumerator = propertyEnumerator;
+		}
+
+		#endregion
+
+		#region Properties
+
+		public virtual object Current
+		{
+			get { return this.Entry.Value; }
+		}
+
+		public virtual DictionaryEntry Entry
+		{
+			get { return new DictionaryEntry(this.PropertyEnumerator.Entry.Key, (PropertyValueCollectionWrapper) (PropertyValueCollection) this.PropertyEnumerator.Entry.Value); }
+		}
+
+		public virtual object Key
+		{
+			get { return this.Entry.Key; }
+		}
+
+		protected internal virtual IDictionaryEnumerator PropertyEnumerator
+		{
+			get { return this._propertyEnumerator; }
+		}
+
+		public virtual object Value
+		{
+			get { return this.Entry.Value; }
+		}
+
+		#endregion
+
+		#region Methods
+
+		public virtual void Dispose()
+		{
+			IDisposable disposable = this.PropertyEnumerator as IDisposable;
+
+			if(disposable != null)
+				disposable.Dispose();
+		}
+
+		public virtual bool MoveNext()
+		{
+			return this.PropertyEnumerator.MoveNext();
+		}
+
+		public virtual void Reset()
+		{
+			this.PropertyEnumerator.Reset();
+		}
+
+		#endregion
+	}
+}

@@ -9,27 +9,24 @@ namespace HansKindberg.DirectoryServices.UnitTests
 		#region Methods
 
 		[TestMethod]
-		public void Test()
+		public void AuthenticationTypes_ShouldReturnTheDefaultValueOfDirectoryEntryAuthenticationTypeByDefault()
 		{
-			const string firstLdapHost = "directory.verisign.com";
-			const string secondLdapHost = "directory.d-trust.de";
+			AuthenticationTypes defaultAuthenticationTypes = new Directory().AuthenticationTypes;
 
-			//Assert.AreEqual(6, new DirectoryEntry("LDAP://" + firstLdapHost, null, null, AuthenticationTypes.Anonymous).Properties.Count);
+			using(DirectoryEntry directoryEntry = new DirectoryEntry())
+			{
+				Assert.AreEqual(defaultAuthenticationTypes, directoryEntry.AuthenticationType);
+			}
 
-			DirectoryEntry root = new DirectoryEntry("LDAP://" + firstLdapHost, null, null, AuthenticationTypes.Anonymous);
+			using(DirectoryEntry directoryEntry = new DirectoryEntry("Test"))
+			{
+				Assert.AreEqual(defaultAuthenticationTypes, directoryEntry.AuthenticationType);
+			}
 
-			//IDictionary dictionary = new Hashtable();
-			//dictionary.Add("Test", "Test");
-
-			//foreach (var child in dictionary)
-			//{
-			//	var test = child;
-			//}
-
-			//foreach (var child in root.Properties)
-			//{
-			//	var test = child;
-			//}
+			using(DirectoryEntry directoryEntry = new DirectoryEntry("Test", "Test", "Test"))
+			{
+				Assert.AreEqual(defaultAuthenticationTypes, directoryEntry.AuthenticationType);
+			}
 		}
 
 		#endregion

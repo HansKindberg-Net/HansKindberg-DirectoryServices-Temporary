@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.DirectoryServices;
-using System.Globalization;
-using System.Linq;
+using HansKindberg.DirectoryServices.Extensions;
 
 namespace HansKindberg.DirectoryServices
 {
@@ -40,9 +37,9 @@ namespace HansKindberg.DirectoryServices
 
 		#region Properties
 
-		public virtual IEnumerable<IDirectoryEntry> Children
+		public virtual IDirectoryEntryCollection Children
 		{
-			get { return this.DirectoryEntry.Children.Cast<DirectoryEntry>().Select(directoryEntry => (DirectoryEntryWrapper) directoryEntry); }
+			get { return (DirectoryEntriesWrapper) this.DirectoryEntry.Children; }
 		}
 
 		public virtual DirectoryEntry DirectoryEntry
@@ -86,9 +83,9 @@ namespace HansKindberg.DirectoryServices
 			set { this.DirectoryEntry.Path = value; }
 		}
 
-		public virtual IDictionary Properties
+		public virtual IPropertyCollection Properties
 		{
-			get { return this.DirectoryEntry.Properties; }
+			get { return (PropertyCollectionWrapper) this.DirectoryEntry.Properties; }
 		}
 
 		public virtual string SchemaClassName
@@ -145,19 +142,6 @@ namespace HansKindberg.DirectoryServices
 		public virtual void Dispose()
 		{
 			this.DirectoryEntry.Dispose();
-		}
-
-		protected internal virtual DirectoryEntry GetDirectoryEntry(IDirectoryEntry directoryEntry)
-		{
-			if(directoryEntry == null)
-				return null;
-
-			IDirectoryEntryInternal directoryEntryInternal = directoryEntry as IDirectoryEntryInternal;
-
-			if(directoryEntryInternal != null)
-				return directoryEntryInternal.DirectoryEntry;
-
-			throw new NotImplementedException(string.Format(CultureInfo.InvariantCulture, "The object of type \"{0}\" does not implement \"{1}\".", directoryEntry.GetType(), typeof(IDirectoryEntryInternal)));
 		}
 
 		public virtual object Invoke(string methodName, params object[] args)

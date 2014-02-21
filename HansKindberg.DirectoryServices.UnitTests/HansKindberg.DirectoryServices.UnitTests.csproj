@@ -54,6 +54,12 @@
     <Compile Include="DirectoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HansKindberg.DirectoryServices\HansKindberg.DirectoryServices.csproj">
+      <Project>{9032a737-6cdd-4877-9db2-51cf9416fca2}</Project>
+      <Name>HansKindberg.DirectoryServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
