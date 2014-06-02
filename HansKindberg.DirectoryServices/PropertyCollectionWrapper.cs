@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
 using System.Linq;
 using HansKindberg.DirectoryServices.Extensions;
 
 namespace HansKindberg.DirectoryServices
 {
-	public class PropertyCollectionWrapper : IPropertyCollection
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is a wrapper.")]
+	public class PropertyCollectionWrapper : IPropertyDictionary
 	{
 		#region Fields
 
@@ -33,17 +35,17 @@ namespace HansKindberg.DirectoryServices
 			get { return this.PropertyCollection.Count; }
 		}
 
-		bool IDictionary.IsFixedSize
+		public virtual bool IsFixedSize
 		{
 			get { return ((IDictionary) this.PropertyCollection).IsFixedSize; }
 		}
 
-		bool IDictionary.IsReadOnly
+		public virtual bool IsReadOnly
 		{
 			get { return ((IDictionary) this.PropertyCollection).IsReadOnly; }
 		}
 
-		bool ICollection.IsSynchronized
+		public virtual bool IsSynchronized
 		{
 			get { return ((ICollection) this.PropertyCollection).IsSynchronized; }
 		}
@@ -53,13 +55,13 @@ namespace HansKindberg.DirectoryServices
 			get { return (PropertyValueCollectionWrapper) this.PropertyCollection[propertyName]; }
 		}
 
-		object IDictionary.this[object key]
+		public virtual object this[object key]
 		{
 			get { return ((IDictionary) this.PropertyCollection)[key]; }
 			set { ((IDictionary) this.PropertyCollection)[key] = value; }
 		}
 
-		ICollection IDictionary.Keys
+		public virtual ICollection Keys
 		{
 			get { return ((IDictionary) this.PropertyCollection).Keys; }
 		}
@@ -74,7 +76,7 @@ namespace HansKindberg.DirectoryServices
 			get { return this.PropertyCollection.PropertyNames; }
 		}
 
-		object ICollection.SyncRoot
+		public virtual object SyncRoot
 		{
 			get { return ((ICollection) this.PropertyCollection).SyncRoot; }
 		}
@@ -88,12 +90,12 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
-		void IDictionary.Add(object key, object value)
+		public virtual void Add(object key, object value)
 		{
 			((IDictionary) this.PropertyCollection).Add(key, value);
 		}
 
-		void IDictionary.Clear()
+		public virtual void Clear()
 		{
 			((IDictionary) this.PropertyCollection).Clear();
 		}
@@ -118,17 +120,23 @@ namespace HansKindberg.DirectoryServices
 			this.PropertyCollection.CopyTo(array.Select(this.GetPropertyValueCollection).ToArray(), index);
 		}
 
+		public static PropertyCollectionWrapper FromPropertyCollection(PropertyCollection propertyCollection)
+		{
+			return propertyCollection;
+		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
 		}
 
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Should be disposed by the caller.")]
 		public virtual IDictionaryEnumerator GetEnumerator()
 		{
 			return new PropertyEnumeratorWrapper(this.PropertyCollection.GetEnumerator());
 		}
 
-		void IDictionary.Remove(object key)
+		public virtual void Remove(object key)
 		{
 			((IDictionary) this.PropertyCollection).Remove(key);
 		}

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
 
 namespace HansKindberg.DirectoryServices
 {
+	[SuppressMessage("Microsoft.Design", "CA1038:EnumeratorsShouldBeStronglyTyped", Justification = "This is a wrapper.")]
+	[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
 	public class PropertyEnumeratorWrapper : IDictionaryEnumerator, IDisposable
 	{
 		#region Fields
@@ -55,6 +58,8 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
+		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
+		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "This is a wrapper.")]
 		public virtual void Dispose()
 		{
 			IDisposable disposable = this.PropertyEnumerator as IDisposable;

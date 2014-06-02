@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
+using System.Linq;
 
 namespace HansKindberg.DirectoryServices
 {
+	[SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Justification = "This is a wrapper.")]
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is a wrapper.")]
 	public class SchemaNameCollectionWrapper : ISchemaNameCollection
 	{
 		#region Fields
@@ -31,17 +36,17 @@ namespace HansKindberg.DirectoryServices
 			get { return this.SchemaNameCollection.Count; }
 		}
 
-		bool IList.IsFixedSize
+		public virtual bool IsFixedSize
 		{
 			get { return ((IList) this.SchemaNameCollection).IsFixedSize; }
 		}
 
-		bool IList.IsReadOnly
+		public virtual bool IsReadOnly
 		{
 			get { return ((IList) this.SchemaNameCollection).IsReadOnly; }
 		}
 
-		bool ICollection.IsSynchronized
+		public virtual bool IsSynchronized
 		{
 			get { return ((ICollection) this.SchemaNameCollection).IsSynchronized; }
 		}
@@ -63,7 +68,7 @@ namespace HansKindberg.DirectoryServices
 			get { return this._schemaNameCollection; }
 		}
 
-		object ICollection.SyncRoot
+		public virtual object SyncRoot
 		{
 			get { return ((ICollection) this.SchemaNameCollection).SyncRoot; }
 		}
@@ -82,9 +87,11 @@ namespace HansKindberg.DirectoryServices
 			return ((IList) this.SchemaNameCollection).Add(value);
 		}
 
-		public virtual void AddRange(string[] value)
+		public virtual void AddRange(IEnumerable<string> value)
 		{
-			this.SchemaNameCollection.AddRange(value);
+			// ReSharper disable AssignNullToNotNullAttribute
+			this.SchemaNameCollection.AddRange(value != null ? value.ToArray() : null);
+			// ReSharper restore AssignNullToNotNullAttribute
 		}
 
 		public virtual void AddRange(SchemaNameCollection value)
@@ -112,9 +119,14 @@ namespace HansKindberg.DirectoryServices
 			((ICollection) this.SchemaNameCollection).CopyTo(array, index);
 		}
 
-		public virtual void CopyTo(string[] stringArray, int index)
+		public virtual void CopyTo(string[] array, int index)
 		{
-			this.SchemaNameCollection.CopyTo(stringArray, index);
+			this.SchemaNameCollection.CopyTo(array, index);
+		}
+
+		public static SchemaNameCollectionWrapper FromSchemaNameCollection(SchemaNameCollection schemaNameCollection)
+		{
+			return schemaNameCollection;
 		}
 
 		public virtual IEnumerator GetEnumerator()

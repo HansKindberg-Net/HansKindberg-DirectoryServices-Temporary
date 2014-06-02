@@ -7,6 +7,13 @@ namespace HansKindberg.DirectoryServices.IntegrationTests
 	[TestClass]
 	public class DirectoryTest
 	{
+		#region Methods
+
+		private static DirectoryEntry CreateDirectoryEntry(string path)
+		{
+			return new DirectoryEntry(path);
+		}
+
 		[TestMethod]
 		public void TemporaryTest()
 		{
@@ -14,36 +21,34 @@ namespace HansKindberg.DirectoryServices.IntegrationTests
 
 			using(var root = directory.Get("LDAP://local.net"))
 			{
-				foreach (IPropertyValueCollection propertyValueCollection in root.Properties)
+				foreach(IPropertyValueCollection propertyValueCollection in root.Properties)
 				{
 					string propertyName = propertyValueCollection.PropertyName;
+					propertyName = propertyName;
+
 					object value = propertyValueCollection.Value;
+					value = value;
 				}
 			}
 		}
 
-		private static DirectoryEntry CreateDirectoryEntry(string path)
-		{
-			return new DirectoryEntry(path);
-		}
-
-		#region Methods
-
 		[TestMethod]
 		public void Test()
 		{
-            //Assert.IsTrue(DirectoryEntry.Exists("LDAP://local.net/OU=OU-2,DC=local,DC=net"));
+			//Assert.IsTrue(DirectoryEntry.Exists("LDAP://local.net/OU=OU-2,DC=local,DC=net"));
 
-            //Assert.IsFalse(DirectoryEntry.Exists("LDAP://local.net/OU=OU-3,DC=local,DC=net"));
+			//Assert.IsFalse(DirectoryEntry.Exists("LDAP://local.net/OU=OU-3,DC=local,DC=net"));
 
-            //Assert.IsFalse(DirectoryEntry.Exists("LDAP://local.net/OU=OU-1,DC=local,DC=net"));
+			//Assert.IsFalse(DirectoryEntry.Exists("LDAP://local.net/OU=OU-1,DC=local,DC=net"));
 
 			using(DirectoryEntry organizationalUnit = CreateDirectoryEntry("LDAP://local.net/OU=OU-1,DC=local,DC=net"))
 			{
 				Guid guid = organizationalUnit.Guid; // To perform a bind (I think)
 
-                using (DirectoryEntry root = CreateDirectoryEntry("LDAP://local.net/DC=local,DC=net"))
-                {
+				guid = guid;
+
+				using(DirectoryEntry root = CreateDirectoryEntry("LDAP://local.net/DC=local,DC=net"))
+				{
 					//foreach(var property in root.Properties)
 					//{
 					//	Type type = property.GetType();
@@ -54,26 +59,21 @@ namespace HansKindberg.DirectoryServices.IntegrationTests
 					//	type = type;
 					//}
 
-					foreach (var property in root.Properties.Values)
+					foreach(var property in root.Properties.Values)
 					{
 						Type type = property.GetType();
 
-						if (type != typeof(PropertyValueCollection))
+						if(type != typeof(PropertyValueCollection))
 							Assert.Fail("Dfafdadf");
 
 						type = type;
 					}
-                }
+				}
 			}
-
-
-			
 
 			//string rootDistinguishedName;
 
-
 			////"LDAP://local.net/OU=OU-1,DC=local,DC=net"
-
 
 			//using(DirectoryEntry root = new DirectoryEntry("LDAP://local.net"))
 			//{
@@ -105,19 +105,6 @@ namespace HansKindberg.DirectoryServices.IntegrationTests
 
 			//	}
 			//}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 			//const string firstLdapHost = "directory.verisign.com";
 			//const string secondLdapHost = "directory.d-trust.de";

@@ -64,6 +64,11 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
+		public static DirectoryEntryConfigurationWrapper FromDirectoryEntryConfiguration(DirectoryEntryConfiguration directoryEntryConfiguration)
+		{
+			return directoryEntryConfiguration;
+		}
+
 		public virtual string GetCurrentServerName()
 		{
 			return this.DirectoryEntryConfiguration.GetCurrentServerName();

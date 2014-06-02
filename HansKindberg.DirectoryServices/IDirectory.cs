@@ -1,4 +1,5 @@
-﻿using System.DirectoryServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.DirectoryServices;
 
 namespace HansKindberg.DirectoryServices
 {
@@ -15,6 +16,8 @@ namespace HansKindberg.DirectoryServices
 		#region Methods
 
 		bool Exists(string path);
+
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Get")]
 		IDirectoryEntry Get(string path);
 
 		#endregion

@@ -1,4 +1,5 @@
-﻿using System.DirectoryServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.DirectoryServices;
 
 namespace HansKindberg.DirectoryServices
 {
@@ -16,7 +17,9 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		string GetCurrentServerName();
+
 		bool IsMutuallyAuthenticated();
 		void SetUserNameQueryQuota(string accountName);
 

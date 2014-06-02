@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.DirectoryServices;
 
 namespace HansKindberg.DirectoryServices
@@ -14,10 +15,10 @@ namespace HansKindberg.DirectoryServices
 		#region Methods
 
 		int Add(string value);
-		void AddRange(string[] value);
+		void AddRange(IEnumerable<string> value);
 		void AddRange(SchemaNameCollection value);
 		bool Contains(string value);
-		void CopyTo(string[] stringArray, int index);
+		void CopyTo(string[] array, int index);
 		int IndexOf(string value);
 		void Insert(int index, string value);
 		void Remove(string value);

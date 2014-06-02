@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
 using HansKindberg.DirectoryServices.Extensions;
 
 namespace HansKindberg.DirectoryServices
 {
+	[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
 	public class DirectoryEntryWrapper : IDirectoryEntry, IDirectoryEntryInternal
 	{
 		#region Fields
@@ -83,7 +85,7 @@ namespace HansKindberg.DirectoryServices
 			set { this.DirectoryEntry.Path = value; }
 		}
 
-		public virtual IPropertyCollection Properties
+		public virtual IPropertyDictionary Properties
 		{
 			get { return (PropertyCollectionWrapper) this.DirectoryEntry.Properties; }
 		}
@@ -139,9 +141,16 @@ namespace HansKindberg.DirectoryServices
 			this.DirectoryEntry.DeleteTree();
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
+		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "This is a wrapper.")]
 		public virtual void Dispose()
 		{
 			this.DirectoryEntry.Dispose();
+		}
+
+		public static DirectoryEntryWrapper FromDirectoryEntry(DirectoryEntry directoryEntry)
+		{
+			return directoryEntry;
 		}
 
 		public virtual object Invoke(string methodName, params object[] args)

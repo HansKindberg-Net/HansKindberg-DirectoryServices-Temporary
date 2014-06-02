@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
+using System.Linq;
 using HansKindberg.DirectoryServices.Extensions;
 
 namespace HansKindberg.DirectoryServices
 {
+	[SuppressMessage("Microsoft.Design", "CA1035:ICollectionImplementationsHaveStronglyTypedMembers", Justification = "This is a wrapper.")]
+	[SuppressMessage("Microsoft.Design", "CA1039:ListsAreStronglyTyped", Justification = "This is a wrapper.")]
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is a wrapper.")]
 	public class PropertyValueCollectionWrapper : IPropertyValueCollection, IPropertyValueCollectionInternal
 	{
 		#region Fields
@@ -32,17 +38,17 @@ namespace HansKindberg.DirectoryServices
 			get { return this.PropertyValueCollection.Count; }
 		}
 
-		bool IList.IsFixedSize
+		public virtual bool IsFixedSize
 		{
 			get { return ((IList) this.PropertyValueCollection).IsFixedSize; }
 		}
 
-		bool IList.IsReadOnly
+		public virtual bool IsReadOnly
 		{
 			get { return ((IList) this.PropertyValueCollection).IsReadOnly; }
 		}
 
-		bool ICollection.IsSynchronized
+		public virtual bool IsSynchronized
 		{
 			get { return ((ICollection) this.PropertyValueCollection).IsSynchronized; }
 		}
@@ -63,7 +69,7 @@ namespace HansKindberg.DirectoryServices
 			get { return this._propertyValueCollection; }
 		}
 
-		object ICollection.SyncRoot
+		public virtual object SyncRoot
 		{
 			get { return ((ICollection) this.PropertyValueCollection).SyncRoot; }
 		}
@@ -83,9 +89,11 @@ namespace HansKindberg.DirectoryServices
 			return this.PropertyValueCollection.Add(value);
 		}
 
-		public virtual void AddRange(object[] value)
+		public virtual void AddRange(IEnumerable<object> value)
 		{
-			this.PropertyValueCollection.AddRange(value);
+			// ReSharper disable AssignNullToNotNullAttribute
+			this.PropertyValueCollection.AddRange(value != null ? value.ToArray() : null);
+			// ReSharper restore AssignNullToNotNullAttribute
 		}
 
 		public virtual void AddRange(IPropertyValueCollection value)
@@ -111,6 +119,11 @@ namespace HansKindberg.DirectoryServices
 		void ICollection.CopyTo(Array array, int index)
 		{
 			((ICollection) this.PropertyValueCollection).CopyTo(array, index);
+		}
+
+		public static PropertyValueCollectionWrapper FromPropertyValueCollection(PropertyValueCollection propertyValueCollection)
+		{
+			return propertyValueCollection;
 		}
 
 		public virtual IEnumerator GetEnumerator()

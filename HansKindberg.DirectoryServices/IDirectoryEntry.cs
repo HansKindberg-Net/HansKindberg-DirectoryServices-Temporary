@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace HansKindberg.DirectoryServices
@@ -18,7 +16,7 @@ namespace HansKindberg.DirectoryServices
 		IDirectoryEntryConfiguration Options { get; }
 		IDirectoryEntry Parent { get; }
 		string Path { get; set; }
-		IPropertyCollection Properties { get; }
+		IPropertyDictionary Properties { get; }
 		string SchemaClassName { get; }
 		IDirectoryEntry SchemaEntry { get; }
 		bool UsePropertyCache { get; set; }

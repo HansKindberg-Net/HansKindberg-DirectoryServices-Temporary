@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.DirectoryServices;
+using System.Collections.Generic;
 
 namespace HansKindberg.DirectoryServices
 {
@@ -14,7 +14,7 @@ namespace HansKindberg.DirectoryServices
 
 		#region Methods
 
-		void AddRange(object[] value);
+		void AddRange(IEnumerable<object> value);
 		void AddRange(IPropertyValueCollection value);
 		void CopyTo(object[] array, int index);
 

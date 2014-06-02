@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace HansKindberg.DirectoryServices
 {
-	public interface IDirectoryEntryCollection : IEnumerable
+	public interface IDirectoryEntryCollection : IEnumerable<IDirectoryEntry>
 	{
 		#region Properties
 

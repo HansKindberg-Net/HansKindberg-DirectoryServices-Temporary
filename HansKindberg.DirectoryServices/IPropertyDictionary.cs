@@ -2,7 +2,7 @@
 
 namespace HansKindberg.DirectoryServices
 {
-	public interface IPropertyCollection : IDictionary
+	public interface IPropertyDictionary : IDictionary
 	{
 		#region Properties
 
