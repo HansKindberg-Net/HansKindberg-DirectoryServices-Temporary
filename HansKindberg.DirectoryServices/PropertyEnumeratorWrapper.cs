@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
+using HansKindberg.Abstractions;
 
 namespace HansKindberg.DirectoryServices
 {
-	[SuppressMessage("Microsoft.Design", "CA1038:EnumeratorsShouldBeStronglyTyped", Justification = "This is a wrapper.")]
 	[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
-	public class PropertyEnumeratorWrapper : IDictionaryEnumerator, IDisposable
+	public class PropertyEnumeratorWrapper : Wrapper<IDictionaryEnumerator>, IDictionaryEnumerator, IEnumerator<object>
 	{
-		#region Fields
-
-		private readonly IDictionaryEnumerator _propertyEnumerator;
-
-		#endregion
-
 		#region Constructors
 
-		public PropertyEnumeratorWrapper(IDictionaryEnumerator propertyEnumerator)
-		{
-			if(propertyEnumerator == null)
-				throw new ArgumentNullException("propertyEnumerator");
-
-			this._propertyEnumerator = propertyEnumerator;
-		}
+		public PropertyEnumeratorWrapper(IDictionaryEnumerator propertyEnumerator) : base(propertyEnumerator, "propertyEnumerator") {}
 
 		#endregion
 
@@ -36,17 +25,12 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual DictionaryEntry Entry
 		{
-			get { return new DictionaryEntry(this.PropertyEnumerator.Entry.Key, (PropertyValueCollectionWrapper) (PropertyValueCollection) this.PropertyEnumerator.Entry.Value); }
+			get { return new DictionaryEntry(this.WrappedInstance.Entry.Key, (PropertyValueCollectionWrapper) (PropertyValueCollection) this.WrappedInstance.Entry.Value); }
 		}
 
 		public virtual object Key
 		{
 			get { return this.Entry.Key; }
-		}
-
-		protected internal virtual IDictionaryEnumerator PropertyEnumerator
-		{
-			get { return this._propertyEnumerator; }
 		}
 
 		public virtual object Value
@@ -62,7 +46,7 @@ namespace HansKindberg.DirectoryServices
 		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "This is a wrapper.")]
 		public virtual void Dispose()
 		{
-			IDisposable disposable = this.PropertyEnumerator as IDisposable;
+			IDisposable disposable = this.WrappedInstance as IDisposable;
 
 			if(disposable != null)
 				disposable.Dispose();
@@ -70,12 +54,12 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual bool MoveNext()
 		{
-			return this.PropertyEnumerator.MoveNext();
+			return this.WrappedInstance.MoveNext();
 		}
 
 		public virtual void Reset()
 		{
-			this.PropertyEnumerator.Reset();
+			this.WrappedInstance.Reset();
 		}
 
 		#endregion

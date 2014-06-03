@@ -1,31 +1,18 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
 using System.Linq;
+using HansKindberg.Abstractions;
 
 namespace HansKindberg.DirectoryServices
 {
-	[SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Justification = "This is a wrapper.")]
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is a wrapper.")]
-	public class SchemaNameCollectionWrapper : ISchemaNameCollection
+	public class SchemaNameCollectionWrapper : Wrapper<SchemaNameCollection>, ISchemaNameCollection
 	{
-		#region Fields
-
-		private readonly SchemaNameCollection _schemaNameCollection;
-
-		#endregion
-
 		#region Constructors
 
-		public SchemaNameCollectionWrapper(SchemaNameCollection schemaNameCollection)
-		{
-			if(schemaNameCollection == null)
-				throw new ArgumentNullException("schemaNameCollection");
-
-			this._schemaNameCollection = schemaNameCollection;
-		}
+		public SchemaNameCollectionWrapper(SchemaNameCollection schemaNameCollection) : base(schemaNameCollection, "schemaNameCollection") {}
 
 		#endregion
 
@@ -33,95 +20,69 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual int Count
 		{
-			get { return this.SchemaNameCollection.Count; }
+			get { return this.WrappedInstance.Count; }
 		}
 
 		public virtual bool IsFixedSize
 		{
-			get { return ((IList) this.SchemaNameCollection).IsFixedSize; }
+			get { return ((IList) this.WrappedInstance).IsFixedSize; }
 		}
 
 		public virtual bool IsReadOnly
 		{
-			get { return ((IList) this.SchemaNameCollection).IsReadOnly; }
+			get { return ((IList) this.WrappedInstance).IsReadOnly; }
 		}
 
 		public virtual bool IsSynchronized
 		{
-			get { return ((ICollection) this.SchemaNameCollection).IsSynchronized; }
+			get { return ((ICollection) this.WrappedInstance).IsSynchronized; }
 		}
 
 		public virtual string this[int index]
 		{
-			get { return this.SchemaNameCollection[index]; }
-			set { this.SchemaNameCollection[index] = value; }
-		}
-
-		object IList.this[int index]
-		{
-			get { return ((IList) this.SchemaNameCollection)[index]; }
-			set { ((IList) this.SchemaNameCollection)[index] = value; }
-		}
-
-		public virtual SchemaNameCollection SchemaNameCollection
-		{
-			get { return this._schemaNameCollection; }
+			get { return this.WrappedInstance[index]; }
+			set { this.WrappedInstance[index] = value; }
 		}
 
 		public virtual object SyncRoot
 		{
-			get { return ((ICollection) this.SchemaNameCollection).SyncRoot; }
+			get { return ((ICollection) this.WrappedInstance).SyncRoot; }
 		}
 
 		#endregion
 
 		#region Methods
 
-		public virtual int Add(string value)
+		public virtual void Add(string item)
 		{
-			return this.SchemaNameCollection.Add(value);
+			this.WrappedInstance.Add(item);
 		}
 
-		int IList.Add(object value)
-		{
-			return ((IList) this.SchemaNameCollection).Add(value);
-		}
-
-		public virtual void AddRange(IEnumerable<string> value)
+		public virtual void AddRange(IEnumerable<string> collection)
 		{
 			// ReSharper disable AssignNullToNotNullAttribute
-			this.SchemaNameCollection.AddRange(value != null ? value.ToArray() : null);
+			this.WrappedInstance.AddRange(collection != null ? collection.ToArray() : null);
 			// ReSharper restore AssignNullToNotNullAttribute
 		}
 
-		public virtual void AddRange(SchemaNameCollection value)
+		public virtual void AddRange(ISchemaNameCollection schemaNameCollection)
 		{
-			this.SchemaNameCollection.AddRange(value);
+			this.WrappedInstance.AddRange(this.GetWrappedSchemaNameCollection(schemaNameCollection));
 		}
 
 		public virtual void Clear()
 		{
-			this.SchemaNameCollection.Clear();
+			this.WrappedInstance.Clear();
 		}
 
-		bool IList.Contains(object value)
+		public virtual bool Contains(string item)
 		{
-			return ((IList) this.SchemaNameCollection).Contains(value);
+			return this.WrappedInstance.Contains(item);
 		}
 
-		public virtual bool Contains(string value)
+		public virtual void CopyTo(string[] array, int arrayIndex)
 		{
-			return this.SchemaNameCollection.Contains(value);
-		}
-
-		void ICollection.CopyTo(Array array, int index)
-		{
-			((ICollection) this.SchemaNameCollection).CopyTo(array, index);
-		}
-
-		public virtual void CopyTo(string[] array, int index)
-		{
-			this.SchemaNameCollection.CopyTo(array, index);
+			this.WrappedInstance.CopyTo(array, arrayIndex);
 		}
 
 		public static SchemaNameCollectionWrapper FromSchemaNameCollection(SchemaNameCollection schemaNameCollection)
@@ -129,44 +90,43 @@ namespace HansKindberg.DirectoryServices
 			return schemaNameCollection;
 		}
 
-		public virtual IEnumerator GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.SchemaNameCollection.GetEnumerator();
+			return this.GetEnumerator();
 		}
 
-		int IList.IndexOf(object value)
+		public virtual IEnumerator<string> GetEnumerator()
 		{
-			return ((IList) this.SchemaNameCollection).IndexOf(value);
+			return this.WrappedInstance.Cast<string>().GetEnumerator();
 		}
 
-		public virtual int IndexOf(string value)
+		protected internal virtual SchemaNameCollection GetWrappedSchemaNameCollection(ISchemaNameCollection schemaNameCollection)
 		{
-			return this.SchemaNameCollection.IndexOf(value);
+			return this.GetWrappedInstance(schemaNameCollection);
 		}
 
-		void IList.Insert(int index, object value)
+		public virtual int IndexOf(string item)
 		{
-			((IList) this.SchemaNameCollection).Insert(index, value);
+			return this.WrappedInstance.IndexOf(item);
 		}
 
-		public virtual void Insert(int index, string value)
+		public virtual void Insert(int index, string item)
 		{
-			this.SchemaNameCollection.Insert(index, value);
+			this.WrappedInstance.Insert(index, item);
 		}
 
-		void IList.Remove(object value)
+		public virtual bool Remove(string item)
 		{
-			((IList) this.SchemaNameCollection).Remove(value);
-		}
+			var count = this.Count;
 
-		public virtual void Remove(string value)
-		{
-			this.SchemaNameCollection.Remove(value);
+			this.WrappedInstance.Remove(item);
+
+			return count > this.Count;
 		}
 
 		public virtual void RemoveAt(int index)
 		{
-			this.SchemaNameCollection.RemoveAt(index);
+			this.WrappedInstance.RemoveAt(index);
 		}
 
 		#endregion

@@ -15,7 +15,7 @@ namespace HansKindberg.DirectoryServices
 		IDirectoryEntry Add(string name, string schemaClassName);
 		IDirectoryEntry Find(string name);
 		IDirectoryEntry Find(string name, string schemaClassName);
-		void Remove(IDirectoryEntry entry);
+		void Remove(IDirectoryEntry directoryEntry);
 
 		#endregion
 	}

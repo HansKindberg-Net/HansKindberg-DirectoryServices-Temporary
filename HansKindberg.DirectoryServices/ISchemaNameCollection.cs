@@ -1,27 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.DirectoryServices;
+﻿using System.Collections.Generic;
 
 namespace HansKindberg.DirectoryServices
 {
-	public interface ISchemaNameCollection : IList
+	public interface ISchemaNameCollection : IList<string>
 	{
-		#region Properties
-
-		new string this[int index] { get; set; }
-
-		#endregion
-
 		#region Methods
 
-		int Add(string value);
-		void AddRange(IEnumerable<string> value);
-		void AddRange(SchemaNameCollection value);
-		bool Contains(string value);
-		void CopyTo(string[] array, int index);
-		int IndexOf(string value);
-		void Insert(int index, string value);
-		void Remove(string value);
+		void AddRange(IEnumerable<string> collection);
+		void AddRange(ISchemaNameCollection schemaNameCollection);
 
 		#endregion
 	}

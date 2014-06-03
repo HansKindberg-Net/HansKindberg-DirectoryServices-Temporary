@@ -2,28 +2,16 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
-using HansKindberg.DirectoryServices.Extensions;
+using HansKindberg.Abstractions;
 
 namespace HansKindberg.DirectoryServices
 {
 	[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
-	public class DirectoryEntryWrapper : IDirectoryEntry, IDirectoryEntryInternal
+	public class DirectoryEntryWrapper : Wrapper<DirectoryEntry>, IDirectoryEntry
 	{
-		#region Fields
-
-		private readonly DirectoryEntry _directoryEntry;
-
-		#endregion
-
 		#region Constructors
 
-		public DirectoryEntryWrapper(DirectoryEntry directoryEntry)
-		{
-			if(directoryEntry == null)
-				throw new ArgumentNullException("directoryEntry");
-
-			this._directoryEntry = directoryEntry;
-		}
+		public DirectoryEntryWrapper(DirectoryEntry directoryEntry) : base(directoryEntry, "directoryEntry") {}
 
 		#endregion
 
@@ -31,8 +19,8 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual event EventHandler Disposed
 		{
-			add { this.DirectoryEntry.Disposed += value; }
-			remove { this.DirectoryEntry.Disposed -= value; }
+			add { this.WrappedInstance.Disposed += value; }
+			remove { this.WrappedInstance.Disposed -= value; }
 		}
 
 		#endregion
@@ -41,75 +29,70 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual IDirectoryEntryCollection Children
 		{
-			get { return (DirectoryEntriesWrapper) this.DirectoryEntry.Children; }
-		}
-
-		public virtual DirectoryEntry DirectoryEntry
-		{
-			get { return this._directoryEntry; }
+			get { return (DirectoryEntriesWrapper) this.WrappedInstance.Children; }
 		}
 
 		public virtual Guid Guid
 		{
-			get { return this.DirectoryEntry.Guid; }
+			get { return this.WrappedInstance.Guid; }
 		}
 
 		public virtual string Name
 		{
-			get { return this.DirectoryEntry.Name; }
+			get { return this.WrappedInstance.Name; }
 		}
 
 		public virtual string NativeGuid
 		{
-			get { return this.DirectoryEntry.NativeGuid; }
+			get { return this.WrappedInstance.NativeGuid; }
 		}
 
 		public virtual object NativeObject
 		{
-			get { return this.DirectoryEntry.NativeObject; }
+			get { return this.WrappedInstance.NativeObject; }
 		}
 
 		public virtual IDirectoryEntryConfiguration Options
 		{
-			get { return (DirectoryEntryConfigurationWrapper) this.DirectoryEntry.Options; }
+			get { return (DirectoryEntryConfigurationWrapper) this.WrappedInstance.Options; }
 		}
 
 		public virtual IDirectoryEntry Parent
 		{
-			get { return (DirectoryEntryWrapper) this.DirectoryEntry.Parent; }
+			get { return (DirectoryEntryWrapper) this.WrappedInstance.Parent; }
 		}
 
 		public virtual string Path
 		{
-			get { return this.DirectoryEntry.Path; }
-			set { this.DirectoryEntry.Path = value; }
+			get { return this.WrappedInstance.Path; }
+			set { this.WrappedInstance.Path = value; }
 		}
 
 		public virtual IPropertyDictionary Properties
 		{
-			get { return (PropertyCollectionWrapper) this.DirectoryEntry.Properties; }
+			get { return (PropertyCollectionWrapper) this.WrappedInstance.Properties; }
 		}
 
 		public virtual string SchemaClassName
 		{
-			get { return this.DirectoryEntry.SchemaClassName; }
+			get { return this.WrappedInstance.SchemaClassName; }
 		}
 
 		public virtual IDirectoryEntry SchemaEntry
 		{
-			get { return (DirectoryEntryWrapper) this.DirectoryEntry.SchemaEntry; }
+			get { return (DirectoryEntryWrapper) this.WrappedInstance.SchemaEntry; }
 		}
 
 		public virtual ISite Site
 		{
-			get { return this.DirectoryEntry.Site; }
-			set { this.DirectoryEntry.Site = value; }
+			get { return this.WrappedInstance.Site; }
+			set { this.WrappedInstance.Site = value; }
 		}
 
 		public virtual bool UsePropertyCache
 		{
-			get { return this.DirectoryEntry.UsePropertyCache; }
-			set { this.DirectoryEntry.UsePropertyCache = value; }
+			get { return this.WrappedInstance.UsePropertyCache; }
+			set { this.WrappedInstance.UsePropertyCache = value; }
 		}
 
 		#endregion
@@ -118,34 +101,34 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual void Close()
 		{
-			this.DirectoryEntry.Close();
+			this.WrappedInstance.Close();
 		}
 
 		public virtual void CommitChanges()
 		{
-			this.DirectoryEntry.CommitChanges();
+			this.WrappedInstance.CommitChanges();
 		}
 
 		public virtual IDirectoryEntry CopyTo(IDirectoryEntry newParent)
 		{
-			return (DirectoryEntryWrapper) this.DirectoryEntry.CopyTo(this.GetDirectoryEntry(newParent));
+			return (DirectoryEntryWrapper) this.WrappedInstance.CopyTo(this.GetWrappedDirectoryEntry(newParent));
 		}
 
 		public virtual IDirectoryEntry CopyTo(IDirectoryEntry newParent, string newName)
 		{
-			return (DirectoryEntryWrapper) this.DirectoryEntry.CopyTo(this.GetDirectoryEntry(newParent), newName);
+			return (DirectoryEntryWrapper) this.WrappedInstance.CopyTo(this.GetWrappedDirectoryEntry(newParent), newName);
 		}
 
 		public virtual void DeleteTree()
 		{
-			this.DirectoryEntry.DeleteTree();
+			this.WrappedInstance.DeleteTree();
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "This is a wrapper.")]
 		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "This is a wrapper.")]
 		public virtual void Dispose()
 		{
-			this.DirectoryEntry.Dispose();
+			this.WrappedInstance.Dispose();
 		}
 
 		public static DirectoryEntryWrapper FromDirectoryEntry(DirectoryEntry directoryEntry)
@@ -153,44 +136,49 @@ namespace HansKindberg.DirectoryServices
 			return directoryEntry;
 		}
 
+		protected internal virtual DirectoryEntry GetWrappedDirectoryEntry(IDirectoryEntry directoryEntry)
+		{
+			return this.GetWrappedInstance(directoryEntry);
+		}
+
 		public virtual object Invoke(string methodName, params object[] args)
 		{
-			return this.DirectoryEntry.Invoke(methodName, args);
+			return this.WrappedInstance.Invoke(methodName, args);
 		}
 
 		public virtual object InvokeGet(string propertyName)
 		{
-			return this.DirectoryEntry.InvokeGet(propertyName);
+			return this.WrappedInstance.InvokeGet(propertyName);
 		}
 
 		public virtual void InvokeSet(string propertyName, params object[] args)
 		{
-			this.DirectoryEntry.InvokeSet(propertyName, args);
+			this.WrappedInstance.InvokeSet(propertyName, args);
 		}
 
 		public virtual void MoveTo(IDirectoryEntry newParent)
 		{
-			this.DirectoryEntry.MoveTo(this.GetDirectoryEntry(newParent));
+			this.WrappedInstance.MoveTo(this.GetWrappedDirectoryEntry(newParent));
 		}
 
 		public virtual void MoveTo(IDirectoryEntry newParent, string newName)
 		{
-			this.DirectoryEntry.MoveTo(this.GetDirectoryEntry(newParent), newName);
+			this.WrappedInstance.MoveTo(this.GetWrappedDirectoryEntry(newParent), newName);
 		}
 
 		public virtual void RefreshCache()
 		{
-			this.DirectoryEntry.RefreshCache();
+			this.WrappedInstance.RefreshCache();
 		}
 
 		public virtual void RefreshCache(string[] propertyNames)
 		{
-			this.DirectoryEntry.RefreshCache(propertyNames);
+			this.WrappedInstance.RefreshCache(propertyNames);
 		}
 
 		public virtual void Rename(string newName)
 		{
-			this.DirectoryEntry.Rename(newName);
+			this.WrappedInstance.Rename(newName);
 		}
 
 		#endregion

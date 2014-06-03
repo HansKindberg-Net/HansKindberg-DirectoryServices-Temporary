@@ -1,63 +1,46 @@
-﻿using System;
-using System.DirectoryServices;
+﻿using System.DirectoryServices;
+using HansKindberg.Abstractions;
 
 namespace HansKindberg.DirectoryServices
 {
-	public class DirectoryEntryConfigurationWrapper : IDirectoryEntryConfiguration
+	public class DirectoryEntryConfigurationWrapper : Wrapper<DirectoryEntryConfiguration>, IDirectoryEntryConfiguration
 	{
-		#region Fields
-
-		private readonly DirectoryEntryConfiguration _directoryEntryConfiguration;
-
-		#endregion
-
 		#region Constructors
 
-		public DirectoryEntryConfigurationWrapper(DirectoryEntryConfiguration directoryEntryConfiguration)
-		{
-			if(directoryEntryConfiguration == null)
-				throw new ArgumentNullException("directoryEntryConfiguration");
-
-			this._directoryEntryConfiguration = directoryEntryConfiguration;
-		}
+		public DirectoryEntryConfigurationWrapper(DirectoryEntryConfiguration directoryEntryConfiguration) : base(directoryEntryConfiguration, "directoryEntryConfiguration") {}
 
 		#endregion
 
 		#region Properties
 
-		protected internal virtual DirectoryEntryConfiguration DirectoryEntryConfiguration
-		{
-			get { return this._directoryEntryConfiguration; }
-		}
-
 		public virtual int PageSize
 		{
-			get { return this.DirectoryEntryConfiguration.PageSize; }
-			set { this.DirectoryEntryConfiguration.PageSize = value; }
+			get { return this.WrappedInstance.PageSize; }
+			set { this.WrappedInstance.PageSize = value; }
 		}
 
 		public virtual PasswordEncodingMethod PasswordEncoding
 		{
-			get { return this.DirectoryEntryConfiguration.PasswordEncoding; }
-			set { this.DirectoryEntryConfiguration.PasswordEncoding = value; }
+			get { return this.WrappedInstance.PasswordEncoding; }
+			set { this.WrappedInstance.PasswordEncoding = value; }
 		}
 
 		public virtual int PasswordPort
 		{
-			get { return this.DirectoryEntryConfiguration.PasswordPort; }
-			set { this.DirectoryEntryConfiguration.PasswordPort = value; }
+			get { return this.WrappedInstance.PasswordPort; }
+			set { this.WrappedInstance.PasswordPort = value; }
 		}
 
 		public virtual ReferralChasingOption Referral
 		{
-			get { return this.DirectoryEntryConfiguration.Referral; }
-			set { this.DirectoryEntryConfiguration.Referral = value; }
+			get { return this.WrappedInstance.Referral; }
+			set { this.WrappedInstance.Referral = value; }
 		}
 
 		public virtual SecurityMasks SecurityMasks
 		{
-			get { return this.DirectoryEntryConfiguration.SecurityMasks; }
-			set { this.DirectoryEntryConfiguration.SecurityMasks = value; }
+			get { return this.WrappedInstance.SecurityMasks; }
+			set { this.WrappedInstance.SecurityMasks = value; }
 		}
 
 		#endregion
@@ -71,17 +54,17 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual string GetCurrentServerName()
 		{
-			return this.DirectoryEntryConfiguration.GetCurrentServerName();
+			return this.WrappedInstance.GetCurrentServerName();
 		}
 
 		public virtual bool IsMutuallyAuthenticated()
 		{
-			return this.DirectoryEntryConfiguration.IsMutuallyAuthenticated();
+			return this.WrappedInstance.IsMutuallyAuthenticated();
 		}
 
 		public virtual void SetUserNameQueryQuota(string accountName)
 		{
-			this.DirectoryEntryConfiguration.SetUserNameQueryQuota(accountName);
+			this.WrappedInstance.SetUserNameQueryQuota(accountName);
 		}
 
 		#endregion

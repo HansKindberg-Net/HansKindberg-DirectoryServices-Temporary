@@ -1,44 +1,27 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices;
 using System.Linq;
-using HansKindberg.DirectoryServices.Extensions;
+using HansKindberg.Abstractions;
+using HansKindberg.Abstractions.Extensions;
 
 namespace HansKindberg.DirectoryServices
 {
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is a wrapper.")]
-	public class DirectoryEntriesWrapper : IDirectoryEntryCollection
+	public class DirectoryEntriesWrapper : Wrapper<DirectoryEntries>, IDirectoryEntryCollection
 	{
-		#region Fields
-
-		private readonly DirectoryEntries _directoryEntries;
-
-		#endregion
-
 		#region Constructors
 
-		public DirectoryEntriesWrapper(DirectoryEntries directoryEntries)
-		{
-			if(directoryEntries == null)
-				throw new ArgumentNullException("directoryEntries");
-
-			this._directoryEntries = directoryEntries;
-		}
+		public DirectoryEntriesWrapper(DirectoryEntries directoryEntries) : base(directoryEntries, "directoryEntries") {}
 
 		#endregion
 
 		#region Properties
 
-		public virtual DirectoryEntries DirectoryEntries
-		{
-			get { return this._directoryEntries; }
-		}
-
 		public virtual ISchemaNameCollection SchemaFilter
 		{
-			get { return (SchemaNameCollectionWrapper) this.DirectoryEntries.SchemaFilter; }
+			get { return (SchemaNameCollectionWrapper) this.WrappedInstance.SchemaFilter; }
 		}
 
 		#endregion
@@ -47,17 +30,17 @@ namespace HansKindberg.DirectoryServices
 
 		public virtual IDirectoryEntry Add(string name, string schemaClassName)
 		{
-			return (DirectoryEntryWrapper) this.DirectoryEntries.Add(name, schemaClassName);
+			return (DirectoryEntryWrapper) this.WrappedInstance.Add(name, schemaClassName);
 		}
 
 		public virtual IDirectoryEntry Find(string name)
 		{
-			return (DirectoryEntryWrapper) this.DirectoryEntries.Find(name);
+			return (DirectoryEntryWrapper) this.WrappedInstance.Find(name);
 		}
 
 		public virtual IDirectoryEntry Find(string name, string schemaClassName)
 		{
-			return (DirectoryEntryWrapper) this.DirectoryEntries.Find(name, schemaClassName);
+			return (DirectoryEntryWrapper) this.WrappedInstance.Find(name, schemaClassName);
 		}
 
 		public static DirectoryEntriesWrapper FromDirectoryEntries(DirectoryEntries directoryEntries)
@@ -65,19 +48,24 @@ namespace HansKindberg.DirectoryServices
 			return directoryEntries;
 		}
 
-		public virtual IEnumerator<IDirectoryEntry> GetEnumerator()
-		{
-			return this.DirectoryEntries.Cast<DirectoryEntry>().Select(directoryEntry => (DirectoryEntryWrapper) directoryEntry).GetEnumerator();
-		}
-
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
 		}
 
-		public virtual void Remove(IDirectoryEntry entry)
+		public virtual IEnumerator<IDirectoryEntry> GetEnumerator()
 		{
-			this.DirectoryEntries.Remove(this.GetDirectoryEntry(entry));
+			return this.WrappedInstance.Cast<DirectoryEntry>().Select(directoryEntry => (DirectoryEntryWrapper) directoryEntry).GetEnumerator();
+		}
+
+		protected internal virtual DirectoryEntry GetWrappedDirectoryEntry(IDirectoryEntry directoryEntry)
+		{
+			return directoryEntry.GetWrappedInstance<DirectoryEntry>();
+		}
+
+		public virtual void Remove(IDirectoryEntry directoryEntry)
+		{
+			this.WrappedInstance.Remove(this.GetWrappedDirectoryEntry(directoryEntry));
 		}
 
 		#endregion
